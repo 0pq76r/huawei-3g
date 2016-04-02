@@ -4,6 +4,7 @@ class SMSMessage:
     message = ""
     sender = ""
     receive_time = None
+    receiver = ""
 
     def __repr__(self):
         return "<SMSMessage {} '{}' from '{}'>".format(self.message_id, self.message, self.sender)

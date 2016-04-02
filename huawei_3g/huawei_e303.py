@@ -194,6 +194,27 @@ class HuaweiE303Modem:
         xml += "</request>"
         self._api_post("/sms/delete-sms", xml)
 
+    def send_message(self, message):
+        """ Send a Text messages
+
+        This expects a message in form of an
+        :class:`~huawei_3g.datastructures.SMSMessage` instance.
+
+        """
+        if not isinstance(message, SMSMessage):
+            return False
+
+        raw = self._api_post("/api/sms/send-sms",
+                             "<?xml version=\"1.0\" encoding=\"UTF-8\"?><request>"
+                             "<Index>-1</Index>"
+                             "<Phones><Phone>{}</Phone></Phones>"
+                             "<Sca></Sca>"
+                             "<Content>{}</Content>"
+                             "<Length>{}</Length>"
+                             "<Reserved>1</Reserved>"
+                             "</request>".format(message.receiver, message.message, len(message.message)))
+        return raw['response']=="OK"
+
     def __repr__(self):
         return "<HuaweiE303Modem {} ({})>".format(self.interface, self.path)
 
