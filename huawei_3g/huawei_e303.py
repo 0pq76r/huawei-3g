@@ -203,8 +203,8 @@ class HuaweiE303Modem:
         """
         if not isinstance(message, SMSMessage):
             return False
-
-        raw = self._api_post("/api/sms/send-sms",
+	
+        raw = self._api_post("/sms/send-sms",
                              "<?xml version=\"1.0\" encoding=\"UTF-8\"?><request>"
                              "<Index>-1</Index>"
                              "<Phones><Phone>{}</Phone></Phones>"
@@ -212,8 +212,9 @@ class HuaweiE303Modem:
                              "<Content>{}</Content>"
                              "<Length>{}</Length>"
                              "<Reserved>1</Reserved>"
-                             "</request>".format(message.receiver, message.message, len(message.message)))
-        return raw['response']=="OK"
+                             "<Date>{}</Date>"
+                             "</request>".format(message.receiver, message.message, len(message.message),datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+        return raw
 
     def __repr__(self):
         return "<HuaweiE303Modem {} ({})>".format(self.interface, self.path)
